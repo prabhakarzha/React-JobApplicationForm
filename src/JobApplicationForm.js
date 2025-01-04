@@ -23,18 +23,39 @@ const JobApplicationForm = () => {
 
   const [submittedData, setSubmittedData] = useState(null);
 
+  // Form field definitions
+
+  const formFields = [
+    { label: "First Name", name: "firstName", type: "text" },
+
+    { label: "Last Name", name: "lastName", type: "text" },
+
+    { label: "Email", name: "email", type: "email" },
+
+    { label: "Address", name: "address", type: "text" },
+
+    { label: "Salary", name: "salary", type: "text" },
+
+    {
+      label: "Gender",
+      name: "gender",
+      type: "select",
+      options: ["Male", "Female"],
+    },
+
+    { label: "Upload Resume", name: "resume", type: "file" },
+  ];
+
   // Handle form input changes (update formData in real-time)
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
 
-    // If input is file, set the file value in the state
-
     if (type === "file") {
       setFormData((prevData) => ({
         ...prevData,
 
-        [name]: files[0], // For file input, we only save the first file
+        [name]: files[0], // Store only the first file selected
       }));
     } else {
       setFormData((prevData) => ({
@@ -48,9 +69,7 @@ const JobApplicationForm = () => {
   // Handle form submission (save the form data after submit)
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent the form from refreshing the page
-
-    // Update the state with the form data when the form is submitted
+    e.preventDefault();
 
     setSubmittedData(formData);
   };
@@ -62,114 +81,51 @@ const JobApplicationForm = () => {
       <br />
 
       <form className="row g-3" onSubmit={handleSubmit}>
-        <div className="col-md-6">
-          <label htmlFor="inputName1" className="form-label">
-            First Name
-          </label>
-
-          <input
-            type="text"
-            className="form-control"
-            id="inputName1"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="col-md-6">
-          <label htmlFor="inputName2" className="form-label">
-            Last Name
-          </label>
-
-          <input
-            type="text"
-            className="form-control"
-            id="inputName2"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="col-md-6">
-          <label htmlFor="inputEmail4" className="form-label">
-            Email
-          </label>
-
-          <input
-            type="email"
-            className="form-control"
-            id="inputEmail4"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="col-md-6">
-          <label htmlFor="inputAddress" className="form-label">
-            Address
-          </label>
-
-          <input
-            type="text"
-            className="form-control"
-            id="inputAddress"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="col-md-6">
-          <label htmlFor="fileUpload" className="form-label">
-            Upload Resume
-          </label>
-
-          <input
-            type="file"
-            className="form-control"
-            id="fileUpload"
-            name="resume"
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="col-md-4">
-          <label htmlFor="inputState" className="form-label">
-            Gender
-          </label>
-
-          <select
-            id="inputState"
-            className="form-select"
-            name="gender"
-            value={formData.gender}
-            onChange={handleChange}
+        {formFields.map((field) => (
+          <div
+            key={field.name}
+            className={`col-md-${field.type === "select" ? 4 : 6}`}
           >
-            <option value="">Select Gender Type</option>
+            <label htmlFor={field.name} className="form-label">
+              {field.label}
+            </label>
 
-            <option value="Male">Male</option>
+            {field.type === "select" ? (
+              <select
+                id={field.name}
+                className="form-select"
+                name={field.name}
+                value={formData[field.name]}
+                onChange={handleChange}
+              >
+                <option value="">Select {field.label}</option>
 
-            <option value="Female">Female</option>
-          </select>
-        </div>
-
-        <div className="col-md-2">
-          <label htmlFor="inputSalary" className="form-label">
-            Salary
-          </label>
-
-          <input
-            type="text"
-            className="form-control"
-            id="inputSalary"
-            name="salary"
-            value={formData.salary}
-            onChange={handleChange}
-          />
-        </div>
+                {field.options?.map((option, idx) => (
+                  <option key={idx} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            ) : field.type === "file" ? (
+              <input
+                type="file"
+                className="form-control"
+                id={field.name}
+                name={field.name}
+                onChange={handleChange}
+              />
+            ) : (
+              <input
+                type={field.type}
+                className="form-control"
+                id={field.name}
+                name={field.name}
+                value={formData[field.name]}
+                onChange={handleChange}
+              />
+            )}
+          </div>
+        ))}
 
         <div className="col-12">
           <button type="submit" className="btn btn-primary">
@@ -186,65 +142,23 @@ const JobApplicationForm = () => {
 
           <table className="table table-bordered">
             <tbody>
-              <tr>
-                <td>
-                  <strong>First Name</strong>
-                </td>
+              {Object.keys(submittedData).map((key) => (
+                <tr key={key}>
+                  <td>
+                    <strong>
+                      {key.replace(/([A-Z])/g, " $1").toUpperCase()}
+                    </strong>
+                  </td>
 
-                <td>{submittedData.firstName}</td>
-              </tr>
-
-              <tr>
-                <td>
-                  <strong>Last Name</strong>
-                </td>
-
-                <td>{submittedData.lastName}</td>
-              </tr>
-
-              <tr>
-                <td>
-                  <strong>Email</strong>
-                </td>
-
-                <td>{submittedData.email}</td>
-              </tr>
-
-              <tr>
-                <td>
-                  <strong>Address</strong>
-                </td>
-
-                <td>{submittedData.address}</td>
-              </tr>
-
-              <tr>
-                <td>
-                  <strong>Gender</strong>
-                </td>
-
-                <td>{submittedData.gender}</td>
-              </tr>
-
-              <tr>
-                <td>
-                  <strong>Salary</strong>
-                </td>
-
-                <td>{submittedData.salary}</td>
-              </tr>
-
-              <tr>
-                <td>
-                  <strong>Resume</strong>
-                </td>
-
-                <td>
-                  {submittedData.resume
-                    ? submittedData.resume.name
-                    : "No file uploaded"}
-                </td>
-              </tr>
+                  <td>
+                    {key === "resume"
+                      ? submittedData[key]
+                        ? submittedData[key].name
+                        : "No file uploaded"
+                      : submittedData[key] || "Not provided"}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
