@@ -2,7 +2,8 @@
 
 /* General styling for the form container */
 .job-application-form {
-  width: 60%;
+  width: 100%;
+  max-width: 600px; /* Limit the width on large screens */
   margin: 0 auto;
   font-family: "Arial", sans-serif;
   background-color: #f9f9f9;
@@ -96,4 +97,58 @@
 .submitted-data-table td strong {
   font-size: 14px;
   color: #333;
+}
+
+/* Mobile responsiveness */
+
+/* For small screens */
+@media (max-width: 768px) {
+  .job-application-form {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .job-application-form h2 {
+    font-size: 24px;
+  }
+
+  .job-application-form .row {
+    margin-bottom: 10px;
+  }
+
+  .job-application-form .col-md-6,
+  .job-application-form .col-md-4 {
+    width: 100%;
+  }
+
+  .job-application-form .btn-primary {
+    padding: 12px;
+    font-size: 18px;
+  }
+
+  .submitted-data-table table {
+    font-size: 14px;
+  }
+}
+
+/* For very small screens like mobile phones in portrait mode */
+@media (max-width: 480px) {
+  .job-application-form {
+    width: 95%;
+    padding: 10px;
+  }
+
+  .job-application-form h2 {
+    font-size: 22px;
+  }
+
+  .job-application-form .btn-primary {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  .submitted-data-table table td,
+  .submitted-data-table table th {
+    font-size: 12px;
+  }
 }
